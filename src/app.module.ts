@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthenticationModule } from './api/authentication/authentication.module';
+import { BookModule } from './api/book/book.module';
 import { UserModule } from './api/user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +25,7 @@ import config from './app/config';
 
     // APis implement here
     UserModule,
+    BookModule,
     AuthenticationModule,
   ],
 
