@@ -13,9 +13,9 @@ export class AuthenticationService {
    */
   generateMagicLink(email: string): string {
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: '15m',
+      expiresIn: '3m',
     });
-    return `http://localhost:8800/authentication/-link?token=${token}`;
+    return `${process.env.BASE_URL}/authentication/verify-link?token=${token}`;
   }
 
   /**
@@ -27,7 +27,7 @@ export class AuthenticationService {
     const magicLink = this.generateMagicLink(payload?.email);
 
     // send mail to user email with magicLink
-    this.emailService.sendMagicLink(payload?.email, magicLink);
+    return this.emailService.sendMagicLink(payload?.email, magicLink);
   }
 
   /**

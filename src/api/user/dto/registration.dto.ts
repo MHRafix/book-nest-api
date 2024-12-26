@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Role } from '../entities/user.entity';
 
 export class RegistrationDto {
   @ApiProperty({ required: true })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   name: string;
 

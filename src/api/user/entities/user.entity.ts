@@ -10,7 +10,7 @@ export enum Role {
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: false })
   name: string;
 
   @Prop({

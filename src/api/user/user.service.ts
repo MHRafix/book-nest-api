@@ -20,7 +20,6 @@ export class UserService {
    */
   async createOrGetUser(email: string, payload?: RegistrationDto) {
     const user = await this.userModel.findOne({ email });
-
     if (user) {
       if (payload) {
         return this.userModel.updateOne({ email }, payload);
@@ -34,19 +33,39 @@ export class UserService {
     });
   }
 
+  /**
+   * find all users
+   * @returns
+   */
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  /**
+   * find single user by id
+   * @param _id string
+   * @returns
+   */
+  findOne(_id: string) {
+    return this.userModel.findById({ _id });
   }
 
-  update(id: number, payload: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  /**
+   *
+   * @param _id objectId
+   * @param payload UpdateUserDto
+   * @returns
+   */
+  update(_id: string, payload: UpdateUserDto) {
+    return this.userModel.updateOne({ _id }, payload);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  /**
+   * remove a user
+   * @param _id string
+   * @returns
+   */
+  remove(_id: string) {
+    return this.userModel.findByIdAndDelete({ _id });
   }
 }
