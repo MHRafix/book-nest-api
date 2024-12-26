@@ -3,14 +3,16 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class EmailService {
+  // mail transporter
   private transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      pass: process.env.APP_PASSWORD,
     },
   });
 
+  // send mail to user email with link
   async sendMagicLink(email: string, magicLink: string) {
     const mailOptions = {
       from: process.env.EMAIL_USER,

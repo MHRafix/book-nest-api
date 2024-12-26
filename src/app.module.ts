@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthenticationModule } from './api/authentication/authentication.module';
+import { UserModule } from './api/user/user.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './app/config';
@@ -22,6 +23,7 @@ import config from './app/config';
     MongooseModule.forRoot(process.env.MONGODB_CONNECTION_URI),
 
     // APis implement here
+    UserModule,
     AuthenticationModule,
   ],
 
