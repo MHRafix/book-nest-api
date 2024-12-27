@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../user/user.service';
 import { AuthenticationService } from './authentication.service';
@@ -28,6 +35,6 @@ export class AuthenticationController {
     if (payload) {
       return this.userService.createOrGetUser(payload?.email);
     }
-    return { message: 'Invalid or expired token.' };
+    throw new ForbiddenException('Token is expired.');
   }
 }
