@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 export class BookDto {
   @ApiProperty()
@@ -22,4 +28,9 @@ export class BookDto {
   @IsNumber()
   @Min(1)
   price: number;
+
+  @ApiProperty({ required: false, default: 0 })
+  @IsOptional()
+  @IsNumber()
+  views?: 0;
 }

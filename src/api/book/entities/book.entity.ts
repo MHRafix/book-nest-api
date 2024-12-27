@@ -15,6 +15,9 @@ export class Book {
 
   @Prop({ required: true })
   price: number;
+
+  @Prop({ required: true, default: 0 })
+  views: number;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

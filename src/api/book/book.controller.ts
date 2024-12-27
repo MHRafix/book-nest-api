@@ -20,13 +20,18 @@ export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Post('/create')
-  create(@Body() payload: BookDto) {
+  create(@Body() payload: [BookDto]) {
     return this.bookService.create(payload);
   }
 
   @Get('/all-books')
   findAll(@Query() filter?: FilterBooksDto) {
     return this.bookService.findAll(filter);
+  }
+
+  @Get('/popular-authors')
+  async findMostPopularAuthors() {
+    return this.bookService.findMostPopularAuthors();
   }
 
   @Get(':id')
@@ -42,6 +47,11 @@ export class BookController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() payload: UpdateBookDto) {
     return this.bookService.update(id, payload);
+  }
+
+  @Patch('update-views/:id')
+  updateViews(@Param('id') id: string) {
+    return this.bookService.updateViews(id);
   }
 
   @Delete(':id')

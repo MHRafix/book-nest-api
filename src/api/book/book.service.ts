@@ -15,8 +15,8 @@ export class BookService {
    * @param payload BookDto
    * @returns
    */
-  create(payload: BookDto) {
-    return this.bookModel.create(payload);
+  create(payload: [BookDto]) {
+    return this.bookModel.insertMany(payload);
   }
 
   /**
@@ -130,6 +130,23 @@ export class BookService {
   }
 
   /**
+   * find most popular author based on interactions
+   * @returns
+   */
+  async findMostPopularAuthors(): Promise<any> {
+    return this.bookModel.aggregate([
+      {
+        $group: {
+          _id: '$author',
+          views: { $sum: '$views' },
+        },
+      },
+      { $sort: { views: -1 } },
+      { $limit: 6 },
+    ]);
+  }
+
+  /**
    * update book
    * @param _id string
    * @param payload UpdateBookDto
@@ -137,6 +154,15 @@ export class BookService {
    */
   update(_id: string, payload: UpdateBookDto) {
     return this.bookModel.updateOne({ _id }, payload);
+  }
+
+  /**
+   * update views - add 1 with existing views amount
+   * @param _id string
+   * @returns
+   */
+  updateViews(_id: string) {
+    return this.bookModel.updateMany({ _id }, { $inc: { views: 1 } });
   }
 
   /**
