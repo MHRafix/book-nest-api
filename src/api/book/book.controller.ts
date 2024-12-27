@@ -34,6 +34,11 @@ export class BookController {
     return this.bookService.findOne(id);
   }
 
+  @Get('average-price/:genre')
+  async getAveragePriceByGenre(@Param('genre') genre: string) {
+    return this.bookService.getAveragePriceByGenre(genre);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() payload: UpdateBookDto) {
     return this.bookService.update(id, payload);

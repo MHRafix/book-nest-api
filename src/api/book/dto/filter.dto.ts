@@ -1,12 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
+
+enum SortType {
+  Asc = 'asc',
+  Desc = 'desc',
+}
 
 export class FilterBooksDto {
   @ApiProperty({ required: false, type: String })
   @IsOptional()
   @IsString()
   genre?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsDateString()
+  publicationDate?: string;
 
   @ApiProperty({ required: false, type: Number })
   @IsOptional()
@@ -27,10 +44,14 @@ export class FilterBooksDto {
   @IsString()
   sortBy?: string;
 
-  @ApiProperty({ required: false, type: String })
+  @ApiProperty({
+    required: false,
+    enum: SortType,
+  })
   @IsOptional()
   @IsString()
-  order?: 'asc' | 'desc';
+  @IsEnum(SortType)
+  order?: SortType.Asc;
 
   @ApiProperty({ required: false, type: Number })
   @IsOptional()

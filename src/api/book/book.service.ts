@@ -27,6 +27,7 @@ export class BookService {
     // destructure the filter
     const {
       genre,
+      publicationDate,
       minPrice,
       maxPrice,
       sortBy = 'title',
@@ -39,13 +40,33 @@ export class BookService {
     const pipeline: any[] = [];
 
     // filter push to pipeline
-    if (genre) pipeline.push({ $match: { genre } });
+    if (genre) pipeline.push({ $match: { genre } }); // filter by genre
+
+    // filter by price range
     if (minPrice || maxPrice) {
       pipeline.push({
         $match: {
           price: {
             ...(minPrice ? { $gte: minPrice } : {}),
             ...(maxPrice ? { $lte: maxPrice } : {}),
+          },
+        },
+      });
+    }
+
+    // get the current date
+    const endPublicationDate = new Date(publicationDate);
+
+    // qdd one day to the current date
+    endPublicationDate.setDate(endPublicationDate.getDate() + 1);
+
+    // filter by publication date
+    if (publicationDate) {
+      pipeline.push({
+        $match: {
+          createdAt: {
+            $gte: new Date(publicationDate),
+            $lte: endPublicationDate,
           },
         },
       });
@@ -61,14 +82,20 @@ export class BookService {
 
     // execute aggregation
     const books = await this.bookModel.aggregate(pipeline);
-    const total = await this.bookModel.countDocuments();
+
+    // get total books count
+    const totalCount = await this.bookModel.countDocuments();
+
+    // get total results count
+    const totalResult = books.length;
 
     return {
       books,
       page,
       limit,
-      total,
-      totalPages: Math.ceil(total / limit),
+      totalResult,
+      totalCount,
+      totalPages: Math.ceil(totalResult / limit),
     };
   }
 
@@ -79,6 +106,27 @@ export class BookService {
    */
   findOne(_id: string) {
     return this.bookModel.findOne({ _id });
+  }
+
+  /**
+   * calculate average price in specific genre
+   * @param genre string
+   * @returns
+   */
+  async getAveragePriceByGenre(genre: string): Promise<any> {
+    const booksByGenre = await this.bookModel.find({ genre }).countDocuments();
+
+    const result = await this.bookModel.aggregate([
+      { $match: { genre } },
+      {
+        $group: {
+          _id: '$genre',
+          averagePrice: { $avg: '$price' },
+        },
+      },
+    ]);
+
+    return { ...result[0], totalBooks: booksByGenre };
   }
 
   /**
