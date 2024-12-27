@@ -21,7 +21,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://book-nest-app.vercel.app'], // Allow requests from specific origin(s)
+    origin: [process.env.APP_LOCAL_URL, process.env.APP_LIVE_URL], // Allow requests from specific origin(s)
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Enable credentials
   });
