@@ -15,7 +15,7 @@ export class AuthenticationService {
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES,
     });
-    return `${process.env.BASE_URL}/authentication/verify-link?token=${token}`;
+    return `${process.env.BASE_URL}/auth/verify-link?token=${token}`;
   }
 
   /**
