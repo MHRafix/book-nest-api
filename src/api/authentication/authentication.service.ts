@@ -1,20 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 import { MagicLinkDto } from './dto/magic-link.dto';
 import { EmailService } from './email.service';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private emailService: EmailService) {}
+  constructor(
+    private emailService: EmailService,
+    private jwtService: JwtService,
+  ) {}
   /**
    * generate magic link
    * @param email string
    * @returns
    */
   generateMagicLink(email: string): string {
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES,
+    const token = this.jwtService.sign({
+      email,
     });
+
     return `${process.env.BASE_URL}/auth/verify-link?token=${token}`;
   }
 
@@ -37,7 +41,9 @@ export class AuthenticationService {
    */
   verifyToken(token: string): { email: string } | null {
     try {
-      return jwt.verify(token, process.env.JWT_SECRET) as { email: string };
+      return this.jwtService.verify(token) as {
+        email: string;
+      };
     } catch {
       return null;
     }

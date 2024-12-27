@@ -37,19 +37,19 @@ export class UserController {
 
   @ApiBearerAuth()
   @ApiOperation({ description: 'Only admin can perform' })
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard)
+  // @Roles(Role.Admin)
+  @UseGuards(AuthGuard())
   @Get('/all-users')
   findAll() {
     return this.userService.findAll();
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only admin can perform' })
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard)
+  @ApiOperation({ description: 'Only logged in user can perform' })
+  @UseGuards(AuthGuard())
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log(id);
     return this.userService.findOne(id);
   }
 
