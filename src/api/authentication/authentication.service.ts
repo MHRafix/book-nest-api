@@ -13,7 +13,7 @@ export class AuthenticationService {
    */
   generateMagicLink(email: string): string {
     const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: '3m',
+      expiresIn: process.env.JWT_EXPIRES,
     });
     return `${process.env.BASE_URL}/authentication/verify-link?token=${token}`;
   }

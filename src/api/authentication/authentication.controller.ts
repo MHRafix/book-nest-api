@@ -31,8 +31,3 @@ export class AuthenticationController {
     return { message: 'Invalid or expired token.' };
   }
 }
-
-// @ApiBearerAuth()
-// @ApiOperation({ description: 'Only admin can access ' })
-// @Roles(Role.Admin)
-// @UseGuards(AuthGuard(), RolesGuard)

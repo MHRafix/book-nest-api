@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
+import { User } from 'src/api/user/entities/user.entity';
 
 export type BookDocument = Book & Document;
 
@@ -18,6 +20,13 @@ export class Book {
 
   @Prop({ required: true, default: 0 })
   views: number;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
+  creator: string;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

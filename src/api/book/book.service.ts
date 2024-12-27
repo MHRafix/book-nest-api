@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { NotificationGateway } from '../notification/notification.gateway';
 import { BookDto } from './dto/book.dto';
 import { FilterBooksDto } from './dto/filter.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -8,15 +9,20 @@ import { Book, BookDocument } from './entities/book.entity';
 
 @Injectable()
 export class BookService {
-  constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
-
+  constructor(
+    @InjectModel(Book.name) private bookModel: Model<BookDocument>,
+    private readonly notificationGateway: NotificationGateway,
+  ) {}
   /**
    * create book
    * @param payload BookDto
    * @returns
    */
-  create(payload: [BookDto]) {
-    return this.bookModel.insertMany(payload);
+  async create(payload: BookDto) {
+    const book = await this.bookModel.create(payload);
+    await this.notificationGateway.broadcastMessage('bookAdded', book);
+    return book;
+    // Broadcast a message to all connected clients
   }
 
   /**

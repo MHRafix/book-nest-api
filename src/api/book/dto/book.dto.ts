@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -22,6 +23,11 @@ export class BookDto {
   @IsNotEmpty()
   @IsString()
   genre: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  creator: string;
 
   @ApiProperty()
   @IsNotEmpty()

@@ -22,6 +22,7 @@ import { UserService } from './user.service';
         };
       },
     }),
+
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UserController],
