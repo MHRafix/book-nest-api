@@ -33,8 +33,9 @@ export class AuthenticationController {
   async verifyMagicLink(@Query('token') token: string) {
     const payload = this.authService.verifyToken(token);
     if (payload) {
-      await this.userService.createOrGetUser(payload?.email);
-      return { token };
+      const user = await this.userService.createOrGetUser(payload?.email);
+      // @ts-ignore
+      return { token, _id: user?._id };
     }
     throw new ForbiddenException('Token is expired.');
   }
