@@ -47,7 +47,7 @@ export class UserService {
    * @returns
    */
   findOne(_id: string) {
-    return this.userModel.findById({ _id });
+    return this.userModel.findOne({ _id });
   }
 
   /**
