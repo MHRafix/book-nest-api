@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -25,7 +24,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Signup' })
   @UseGuards(AuthGuard())
   @Post('/createOrGetUser')
   createOrGetUser(
@@ -36,7 +35,7 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only admin can perform' })
+  @ApiOperation({ description: 'Get all users' })
   // @Roles(Role.Admin)
   @UseGuards(AuthGuard())
   @Get('/all-users')
@@ -45,7 +44,7 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Get single user' })
   @UseGuards(AuthGuard())
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -54,20 +53,11 @@ export class UserController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only admin can perform' })
+  @ApiOperation({ description: 'Update user' })
   @Roles(Role.Admin)
   @UseGuards(AuthGuard(), RolesGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
-  }
-
-  @ApiBearerAuth()
-  @ApiOperation({ description: 'Only admin can perform' })
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard(), RolesGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
   }
 }

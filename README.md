@@ -11,6 +11,16 @@
 - Passport
 - Web Socket
 
+## Features
+
+- Magic link authentication
+- Book crud API
+- User crud API
+- Book listing with filtering and sorting
+- Popular authors based on user interactions
+- Average price of specific genre
+- Web socket notification
+
 ## Instructions to run the app
 
 - pnpm/npm/yarn install

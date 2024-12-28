@@ -22,7 +22,7 @@ export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Create books' })
   @UseGuards(AuthGuard())
   @Post('/create')
   create(@Body() payload: BookDto) {
@@ -30,7 +30,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'All books' })
   @UseGuards(AuthGuard())
   @Get('/all-books')
   findAll(@Query() filter?: FilterBooksDto) {
@@ -38,7 +38,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Specific user books' })
   @UseGuards(AuthGuard())
   @Get('/my-books/:id')
   findMyBooks(@Param('id') id: string) {
@@ -46,7 +46,9 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({
+    description: 'Get popular authors based on user interaction',
+  })
   @UseGuards(AuthGuard())
   @Get('/popular-authors')
   async findMostPopularAuthors() {
@@ -54,7 +56,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Find single book' })
   @UseGuards(AuthGuard())
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -62,7 +64,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Average price of specific genre' })
   @UseGuards(AuthGuard())
   @Get('average-price/:genre')
   async getAveragePriceByGenre(@Param('genre') genre: string) {
@@ -70,7 +72,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Update book' })
   @UseGuards(AuthGuard())
   @Patch(':id')
   update(@Param('id') id: string, @Body() payload: UpdateBookDto) {
@@ -78,7 +80,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Save user interaction' })
   @UseGuards(AuthGuard())
   @Patch('update-views/:id')
   updateViews(@Param('id') id: string) {
@@ -86,7 +88,7 @@ export class BookController {
   }
 
   @ApiBearerAuth()
-  @ApiOperation({ description: 'Only logged in user can perform' })
+  @ApiOperation({ description: 'Delete book' })
   @UseGuards(AuthGuard())
   @Delete(':id')
   remove(@Param('id') id: string) {
