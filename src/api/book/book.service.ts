@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { WebSocketServer } from '@nestjs/websockets';
 import { Model } from 'mongoose';
+import { Server } from 'socket.io';
 import { NotificationGateway } from '../notification/notification.gateway';
 import { BookDto } from './dto/book.dto';
 import { FilterBooksDto } from './dto/filter.dto';
@@ -13,6 +15,9 @@ export class BookService {
     @InjectModel(Book.name) private bookModel: Model<BookDocument>,
     private readonly notificationGateway: NotificationGateway,
   ) {}
+
+  @WebSocketServer()
+  server: Server;
   /**
    * create book
    * @param payload BookDto
@@ -20,7 +25,8 @@ export class BookService {
    */
   async create(payload: BookDto) {
     const book = await this.bookModel.create(payload);
-    await this.notificationGateway.broadcastMessage('bookAdded', book);
+    // await this.notificationGateway.afterInit(this.server);
+    // await this.notificationGateway.broadcastNotification(book);
     return book;
     // Broadcast a message to all connected clients
   }

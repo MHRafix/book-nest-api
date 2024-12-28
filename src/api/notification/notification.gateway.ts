@@ -1,68 +1,50 @@
 import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
+  ConnectedSocket,
+  MessageBody,
+  OnGatewayInit,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-// @WebSocketGateway()
-// export class NotificationGateway
-//   implements OnGatewayConnection, OnGatewayDisconnect
-// {
-//   constructor(private readonly notificationService: NotificationService) {}
-//   handleConnection(client: any, ...args: any[]) {
-//     throw new Error('Method not implemented.');
-//   }
-//   handleConnection(client: any, ...args: any[]) {
-//     throw new Error('Method not implemented.');
-//   }
-
-//   @SubscribeMessage('createNotification')
-//   create(@MessageBody() createNotificationDto: CreateNotificationDto) {
-//     return this.notificationService.create(createNotificationDto);
-//   }
-
-//   @SubscribeMessage('findAllNotification')
-//   findAll() {
-//     return this.notificationService.findAll();
-//   }
-
-//   @SubscribeMessage('findOneNotification')
-//   findOne(@MessageBody() id: number) {
-//     return this.notificationService.findOne(id);
-//   }
-
-//   @SubscribeMessage('updateNotification')
-//   update(@MessageBody() updateNotificationDto: UpdateNotificationDto) {
-//     return this.notificationService.update(
-//       updateNotificationDto.id,
-//       updateNotificationDto,
-//     );
-//   }
-
-//   @SubscribeMessage('removeNotification')
-//   remove(@MessageBody() id: number) {
-//     return this.notificationService.remove(id);
-//   }
-// }
-
-@WebSocketGateway()
-export class NotificationGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
+@WebSocketGateway({
+  cors: {
+    origin: '*', // Allow all origins for simplicity; adjust for production
+  },
+})
+export class NotificationGateway implements OnGatewayInit {
   @WebSocketServer()
-  server: Server;
+  server: Server; // The WebSocket server instance
 
-  handleConnection(client: any) {
+  afterInit(server: Server) {
+    console.log('WebSocket server initialized');
+    // You can now safely use this.server here
+  }
+
+  handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client: any) {
+  handleDisconnect(client: Socket) {
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  broadcastMessage(event: string, message: any) {
-    this.server.emit(event, message);
+  @SubscribeMessage('sendNotification')
+  sendNotification(
+    @MessageBody() data: { userId: string; message: string },
+    @ConnectedSocket() client: Socket,
+  ): void {
+    console.log(`Notification received:`, data);
+    this.server.emit('receiveNotification', data); // Broadcast to all connected clients
+  }
+
+  // Example method for programmatically broadcasting
+  broadcastNotification(message: any): void {
+    if (!this.server) {
+      console.error('WebSocket server not initialized');
+      return;
+    }
+    this.server.emit('receiveNotification', { message });
   }
 }
