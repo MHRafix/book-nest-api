@@ -40,6 +40,14 @@ export class BookController {
   @ApiBearerAuth()
   @ApiOperation({ description: 'Only logged in user can perform' })
   @UseGuards(AuthGuard())
+  @Get('/my-books/:id')
+  findMyBooks(@Param('id') id: string, @Query() filter?: FilterBooksDto) {
+    return this.bookService.findBooksByUserId(id, filter);
+  }
+
+  @ApiBearerAuth()
+  @ApiOperation({ description: 'Only logged in user can perform' })
+  @UseGuards(AuthGuard())
   @Get('/popular-authors')
   async findMostPopularAuthors() {
     return this.bookService.findMostPopularAuthors();

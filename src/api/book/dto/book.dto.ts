@@ -9,6 +9,10 @@ import {
 } from 'class-validator';
 
 export class BookDto {
+  @IsOptional()
+  @IsMongoId()
+  _id: string;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -32,7 +36,7 @@ export class BookDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()
-  @Min(1)
+  @Min(0)
   price: number;
 
   @ApiProperty({ required: false, default: 0 })

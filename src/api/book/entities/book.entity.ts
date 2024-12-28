@@ -15,7 +15,7 @@ export class Book {
   @Prop({ required: true })
   genre: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, min: 0 })
   price: number;
 
   @Prop({ required: true, default: 0 })

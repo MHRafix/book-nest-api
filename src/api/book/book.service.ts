@@ -112,6 +112,90 @@ export class BookService {
   }
 
   /**
+   * find book by user id
+   * @returns
+   */
+  async findBooksByUserId(_id: string, filter: FilterBooksDto) {
+    // destructure the filter
+    const {
+      genre,
+      publicationDate,
+      minPrice,
+      maxPrice,
+      sortBy = 'title',
+      order = 'asc',
+      page = 1,
+      limit = 10,
+    } = filter;
+
+    // filter pipeline
+    const pipeline: any[] = [];
+
+    // filter push to pipeline
+    if (genre) pipeline.push({ $match: { genre } }); // filter by genre
+
+    // filter by price range
+    if (minPrice || maxPrice) {
+      pipeline.push({
+        $match: {
+          price: {
+            ...(minPrice ? { $gte: minPrice } : {}),
+            ...(maxPrice ? { $lte: maxPrice } : {}),
+          },
+        },
+      });
+    }
+
+    // get the current date
+    const endPublicationDate = new Date(publicationDate);
+
+    // qdd one day to the current date
+    endPublicationDate.setDate(endPublicationDate.getDate() + 1);
+
+    // filter by publication date
+    if (publicationDate) {
+      pipeline.push({
+        $match: {
+          createdAt: {
+            $gte: new Date(publicationDate),
+            $lte: endPublicationDate,
+          },
+        },
+      });
+    }
+
+    // sorting filter
+    pipeline.push({ $sort: { [sortBy]: order === 'asc' ? 1 : -1 } });
+
+    // pagination
+    const skip = (page - 1) * limit;
+    pipeline.push({ $skip: skip });
+    pipeline.push({ $limit: limit });
+
+    // execute aggregation
+    const books = await this.bookModel.aggregate(pipeline);
+
+    const booksByUserId = books?.filter(
+      (book: BookDto) => book?.creator === _id,
+    );
+
+    // get total books count
+    const totalCount = booksByUserId?.length;
+
+    // get total results count
+    const totalResult = booksByUserId.length;
+
+    return {
+      books: booksByUserId,
+      page,
+      limit,
+      totalResult,
+      totalCount,
+      totalPages: Math.ceil(totalResult / limit),
+    };
+  }
+
+  /**
    * find single book
    * @param _id string
    * @returns
