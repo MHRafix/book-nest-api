@@ -41,8 +41,8 @@ export class BookController {
   @ApiOperation({ description: 'Only logged in user can perform' })
   @UseGuards(AuthGuard())
   @Get('/my-books/:id')
-  findMyBooks(@Param('id') id: string, @Query() filter?: FilterBooksDto) {
-    return this.bookService.findBooksByUserId(id, filter);
+  findMyBooks(@Param('id') id: string) {
+    return this.bookService.findBooksByUserId(id);
   }
 
   @ApiBearerAuth()
