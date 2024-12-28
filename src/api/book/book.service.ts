@@ -25,8 +25,9 @@ export class BookService {
    */
   async create(payload: BookDto) {
     const book = await this.bookModel.create(payload);
-    // Broadcast the new book to all connected clients
-    this.bookGateway.broadcastBookAdded(book);
+
+    // notification
+    // this.bookGateway.broadcastBookAdded(book);
     return book;
     // Broadcast a message to all connected clients
   }
