@@ -15,7 +15,7 @@ export class NotificationGateway
   @WebSocketServer() server: Server;
 
   handleConnection(client: Socket) {
-    console.log('New user connected', client?.id);
+    // console.log('New user connected', client?.id);
 
     client.broadcast.emit('connected', {
       message: 'New book added to list.',
@@ -23,7 +23,7 @@ export class NotificationGateway
   }
 
   handleDisconnect(client: Socket) {
-    console.log('User disconnected:', client.id);
+    // console.log('User disconnected:', client.id);
 
     this.server.emit('disconnected', {
       message: `User disconnected: ${client.id}`,
@@ -31,7 +31,7 @@ export class NotificationGateway
   }
 
   // Broadcast a message to all connected clients
-  @SubscribeMessage('notify-user')
+  @SubscribeMessage('notify')
   broadcastBookAddedMessage(@MessageBody() message: string) {
     this.server.emit('bookAdded', message);
   }

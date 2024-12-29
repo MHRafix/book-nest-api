@@ -27,7 +27,9 @@ export class BookService {
     const book = await this.bookModel.create(payload);
 
     // notification
-    // this.bookGateway.broadcastBookAdded(book);
+    this.notificationGateway.broadcastBookAddedMessage(
+      'New book added to list.',
+    );
     return book;
     // Broadcast a message to all connected clients
   }

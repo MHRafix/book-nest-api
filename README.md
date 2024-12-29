@@ -13,7 +13,7 @@
 
 ## Features
 
-- Magic link authentication
+- Magic link authentication [link expiration time: 15 mins]
 - Book crud API
 - User crud API
 - Book listing with filtering and sorting
