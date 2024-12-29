@@ -19,7 +19,7 @@ export class AuthenticationService {
       email,
     });
 
-    return `${process.env.BASE_URL}/auth/verify-link?token=${token}`;
+    return `${process.env.APP_LIVE_URL}/auth/verify-link?token=${token}`;
   }
 
   /**

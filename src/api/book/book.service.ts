@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { WebSocketServer } from '@nestjs/websockets';
 import { Model } from 'mongoose';
 import { Server } from 'socket.io';
-import { BookGateway } from './book.gateway';
+import { NotificationGateway } from '../notification/notification.gateway';
 import { BookDto } from './dto/book.dto';
 import { FilterBooksDto } from './dto/filter.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -13,7 +13,7 @@ import { Book, BookDocument } from './entities/book.entity';
 export class BookService {
   constructor(
     @InjectModel(Book.name) private bookModel: Model<BookDocument>,
-    private readonly bookGateway: BookGateway,
+    private readonly notificationGateway: NotificationGateway,
   ) {}
 
   @WebSocketServer()

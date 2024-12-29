@@ -22,7 +22,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: process.env.APP_LIVE_URL, // Allow requests from specific origin(s)
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    // origin: 'http://localhost:3000', // Allow requests from specific origin(s)
+    // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Enable credentials
   });
 
